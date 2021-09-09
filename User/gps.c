@@ -8,9 +8,9 @@ struct position posiInfo;
 
 
 
-//��GPS���ݷ���
-//����ֵ��GPS��Ϣ
-//���ֵ�����֣�1->GNRMC��2->GNVTG
+//解析GPS数据代码
+//传入值：收到的GPS数据
+//传出值：GPS数据分类信息：1->GNRMC,2->GNVTG
 int GPSDataClass(char *str)
 {
 	if(str[0]=='$' && (str[2]=='N' && str[4]=='M'))
@@ -30,11 +30,11 @@ int GPSDataClass(char *str)
 
 
 
-//����GPS����
-//����ֵ��GPS���ݷ���Ľ����1->GNRMC��2->GNVTG
+//解析GPS数据代码
+//传入值：GPS数据类别码1->GNRMC，2->GNVTG
  void parseGPSData(int DataNum)
  {
-//	printf("%s\r\n",GPSData.GNRMC);//̽��
+//	printf("%s\r\n",GPSData.GNRMC);//探针
 	char *subString;
 	char *subStringNext;
 	int i = 0;
@@ -42,7 +42,7 @@ int GPSDataClass(char *str)
 	{
 		
 		
-		if(GPSData.GNRMC[0] == '$' )//������ΪGNRMCʱ
+		if(GPSData.GNRMC[0] == '$' )//确认收到GNRMC
 		{
 			printf("*** parseGPSData ***\r\n");
 			
@@ -53,12 +53,12 @@ int GPSDataClass(char *str)
 				{
 					if((subString = strstr(GPSData.GNRMC, ",")) == NULL)
 					{
-						printf("��������");
+						printf("解析错误");
 					}
 				}
 				else
 				{
-					subString++;//������������ж��ŵ���һλ
+					subString++;//到达解析数据中逗号的下一位
 					if((subStringNext = strstr(subString, ",")) != NULL)
 					{
 						//printf("Pin1");
@@ -66,7 +66,7 @@ int GPSDataClass(char *str)
 						switch(i)
 						{
 							case 1: 
-								//����subStringNext��subString���׵�ַ�����ȷ��ָ�뿪�ٿռ�Ĵ�С���Է�ָ�벻�Ϸ���
+								//利用subStringNext和subString的首地址相减来确定指针开辟空间的大小。
 								posiInfo.UTCtime = (char *)malloc((subStringNext - subString)*sizeof(char));
 								memcpy(posiInfo.UTCtime, subString, subStringNext - subString); 
 								break;
@@ -94,7 +94,7 @@ int GPSDataClass(char *str)
 							default: break;
 						}
 						
-//						printf("%s\r\n",posiInfo.E_W);//̽��
+//						printf("%s\r\n",posiInfo.E_W);//探针
 						subString = subStringNext;
 						posiInfo.isParsePosition = 1;
 						if(usefullBuffer[0] == 'A')
@@ -166,12 +166,12 @@ int GPSDataClass(char *str)
 // }
 
 
- //��ӡGPS���ݴ��뵽���ڵ���������
+ //打印GPS数据代码到串口
  void printfPosiInfo(void)
  {
 	if(posiInfo.isParsePosition == 1)
 	{
-//		printf("%s\r\n",GPSData.GNRMC);//̽��
+//		printf("%s\r\n",GPSData.GNRMC);//探针
 		printf("Greenwich mean time is %c%c:%c%c:%c%c\r\n",posiInfo.UTCtime[0],posiInfo.UTCtime[1],posiInfo.UTCtime[2],posiInfo.UTCtime[3],posiInfo.UTCtime[4],posiInfo.UTCtime[5]);
 		free(posiInfo.UTCtime);
 		if(posiInfo.status == 1)
