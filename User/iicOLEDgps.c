@@ -13,7 +13,7 @@ void displayInfo(void)
 	OLED_ShowStr(0, 3, posiInfo.latitude, 2);
 	OLED_ShowStr(103, 3, posiInfo.N_S, 2);
 		
-	OLED_ShowStr(0, 5, "latitude:", 1);
+	OLED_ShowStr(0, 5, "longitude:", 1);
 	OLED_ShowStr(0, 6, posiInfo.longitude, 2);
 	OLED_ShowStr(103, 6, posiInfo.E_W, 2);
 }
