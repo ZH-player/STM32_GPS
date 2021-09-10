@@ -7,7 +7,7 @@ static uint16_t fac_ms=0; //ms延时倍乘数
 void Delay_Init()
 {
 	((SysTick_Type*)(0xE000e010))->CTRL &=~(1<<2);//1、确定时钟源（系统时钟的8分频）
-	fac_us=SystemCoreClock/8000000;  //设置为系统时钟的1/8
+	fac_us=SystemCoreClock/800000;  //设置为系统时钟的1/8
     fac_ms=(u16)fac_us*1000;
 }
 
