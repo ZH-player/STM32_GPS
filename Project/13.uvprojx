@@ -540,6 +540,11 @@
               <FileType>1</FileType>
               <FilePath>..\SYS\usart3_gps.c</FilePath>
             </File>
+            <File>
+              <FileName>iicOLEDgps.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\iicOLEDgps.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -584,6 +589,11 @@
               <FileName>usart1.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\SYS\usart1.c</FilePath>
+            </File>
+            <File>
+              <FileName>oled_i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\SYS\oled_i2c.c</FilePath>
             </File>
           </Files>
         </Group>

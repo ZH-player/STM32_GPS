@@ -38,5 +38,7 @@
 .\objects\gps.o: ..\SYS\usart1.h
 .\objects\gps.o: ..\SYS\usart3_gps.h
 .\objects\gps.o: ..\User\gps.h
+.\objects\gps.o: ..\SYS\oled_i2c.h
+.\objects\gps.o: ..\User\iicOLEDgps.h
 .\objects\gps.o: D:\ZH_other_soft\Keil_arm\ARM\ARMCC\Bin\..\include\string.h
 .\objects\gps.o: D:\ZH_other_soft\Keil_arm\ARM\ARMCC\Bin\..\include\stdlib.h 

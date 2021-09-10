@@ -40,3 +40,5 @@
 .\objects\led.o: ..\User\gps.h
 .\objects\led.o: D:\ZH_other_soft\Keil_arm\ARM\ARMCC\Bin\..\include\string.h
 .\objects\led.o: D:\ZH_other_soft\Keil_arm\ARM\ARMCC\Bin\..\include\stdlib.h 
+.\objects\led.o: ..\SYS\oled_i2c.h
+.\objects\led.o: ..\User\iicOLEDgps.h

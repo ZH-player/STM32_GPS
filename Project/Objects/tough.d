@@ -40,3 +40,5 @@
 .\objects\tough.o: ..\User\gps.h
 .\objects\tough.o: D:\ZH_other_soft\Keil_arm\ARM\ARMCC\Bin\..\include\string.h
 .\objects\tough.o: D:\ZH_other_soft\Keil_arm\ARM\ARMCC\Bin\..\include\stdlib.h 
+.\objects\tough.o: ..\SYS\oled_i2c.h
+.\objects\tough.o: ..\User\iicOLEDgps.h

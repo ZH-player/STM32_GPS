@@ -28,6 +28,7 @@
 ".\objects\main.o"
 ".\objects\gps.o"
 ".\objects\usart3_gps.o"
+".\objects\iicoledgps.o"
 ".\objects\startup_stm32f10x_hd.o"
 ".\objects\bsp_systick.o"
 ".\objects\delay.o"
@@ -35,6 +36,7 @@
 ".\objects\led.o"
 ".\objects\tough.o"
 ".\objects\usart1.o"
+".\objects\oled_i2c.o"
 --strict --scatter ".\Objects\13.sct"
 --summary_stderr --info summarysizes --map --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

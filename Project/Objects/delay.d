@@ -40,3 +40,5 @@
 .\objects\delay.o: ..\User\gps.h
 .\objects\delay.o: D:\ZH_other_soft\Keil_arm\ARM\ARMCC\Bin\..\include\string.h
 .\objects\delay.o: D:\ZH_other_soft\Keil_arm\ARM\ARMCC\Bin\..\include\stdlib.h 
+.\objects\delay.o: ..\SYS\oled_i2c.h
+.\objects\delay.o: ..\User\iicOLEDgps.h

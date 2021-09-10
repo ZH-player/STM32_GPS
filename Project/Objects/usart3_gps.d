@@ -40,3 +40,5 @@
 .\objects\usart3_gps.o: ..\User\gps.h
 .\objects\usart3_gps.o: D:\ZH_other_soft\Keil_arm\ARM\ARMCC\Bin\..\include\string.h
 .\objects\usart3_gps.o: D:\ZH_other_soft\Keil_arm\ARM\ARMCC\Bin\..\include\stdlib.h 
+.\objects\usart3_gps.o: ..\SYS\oled_i2c.h
+.\objects\usart3_gps.o: ..\User\iicOLEDgps.h
