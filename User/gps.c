@@ -8,6 +8,7 @@ struct position posiInfo;
 
 
 
+
 //解析GPS数据代码
 //传入值：收到的GPS数据
 //传出值：GPS数据分类信息：1->GNRMC,2->GNVTG
@@ -68,7 +69,9 @@ int GPSDataClass(char *str)
 							case 1: 
 								//利用subStringNext和subString的首地址相减来确定指针开辟空间的大小。
 								posiInfo.UTCtime = (char *)malloc((subStringNext - subString)*sizeof(char));
-								memcpy(posiInfo.UTCtime, subString, subStringNext - subString); 
+								memcpy(posiInfo.UTCtime, subString, subStringNext - subString);
+								posiInfo.BeiJingtime = (char *)malloc(8*sizeof(char));
+								UTCtoBeiJing();
 								break;
 							case 2: memcpy(usefullBuffer, subString, subStringNext - subString); break;
 							case 3: posiInfo.latitude = (char *)malloc((subStringNext - subString)*sizeof(char));
@@ -89,6 +92,8 @@ int GPSDataClass(char *str)
 								memcpy(posiInfo.UTCday, subString, subStringNext - subString); 
 								posiInfo.mode = (char *)malloc(1*sizeof(char));
 								memcpy(posiInfo.mode,subStringNext+3,1);
+								posiInfo.Today = (char *)malloc(10*sizeof(char));
+								UTCtoToday();
 								break;
 							
 							default: break;
@@ -105,7 +110,7 @@ int GPSDataClass(char *str)
 					else
 					{
 						posiInfo.isParsePosition = 0;
-						printf("��������2");
+						printf("解析错误2");
 					}
 				}
 			}
@@ -114,56 +119,40 @@ int GPSDataClass(char *str)
 }
 
 
-////����GPS����
-////����ֵ��GPS���ݷ���Ľ����1->GNRMC��2->GNVTG
-// void parseGPSData(int DataNum)
-// {
-//	 int i=0;//��¼���ڵĶ���λ��
-//	 int j=0;//��¼ǰһ������λ��
-//	 int commaNum = 0;
-//	 if(DataNum == 1)//������ΪGNRMCʱ
-//	 {
-////		posiInfo.isParsePosition = 0;
-//		for(i=0;GPSData.GNRMC[i]!='*';i++)
-//		{
-//			if(GPSData.GNRMC[i]==',')//ÿ������һ����,��ʱ������ǰ�����Ϣ
-//			{
-//				commaNum++;
-//				switch(commaNum)
-//				{
-//					case 1:break;
-//					case 2:posiInfo.UTCtime = (char *)malloc((i-j)*sizeof(char));
-//						   memcpy(posiInfo.UTCtime,GPSData.GNRMC+j,i-j-1);break;
-//					case 3:if(GPSData.GNRMC[i-1]=='A')
-//						   {
-//								posiInfo.status = 1;
-//						   }else
-//						   {
-//								posiInfo.status = 0;
-//						   }break;
-//					case 4:posiInfo.N_S = (char *)malloc((i-j)*sizeof(char));
-//						   memcpy(posiInfo.N_S,GPSData.GNRMC+j,i-j-1);break;
-//					case 5:posiInfo.latitude = (char *)malloc((i-j)*sizeof(char));
-//						   memcpy(posiInfo.latitude,GPSData.GNRMC+j,i-j-1);break;
-//					case 6:posiInfo.E_W = (char *)malloc((i-j)*sizeof(char));
-//						   memcpy(posiInfo.E_W,GPSData.GNRMC+j,i-j-1);break;
-//					case 7:posiInfo.longitude = (char *)malloc((i-j)*sizeof(char));
-//						   memcpy(posiInfo.longitude,GPSData.GNRMC+j,i-j-1);break;
-//					case 8:break;// ��������
-//					case 9:break;//���溽��
-//					case 10:posiInfo.UTCday = (char *)malloc((i-j)*sizeof(char));
-//							memcpy(posiInfo.UTCday,GPSData.GNRMC+j,i-j-1);break;
-//					case 11:posiInfo.mode = (char *)malloc((i-j)*sizeof(char));
-//							memcpy(posiInfo.mode,GPSData.GNRMC+j,i-j-1);break;
-//					default: break;
-//				}
-//				j = i;
-//			posiInfo.isParsePosition = 1;
-//			}
-//			
-//		}
-//	 }
-// }
+//格林尼治转换成北京时间
+//posiInfo.UTCtime -> posiInfo.BeiJingtime
+ void UTCtoBeiJing(void)
+ {
+	 int x;
+	 
+	//转换北京时间
+	x = (posiInfo.UTCtime[0] - '0')*10 + posiInfo.UTCtime[1]-'0' + 8;
+	x = x % 24;
+	posiInfo.BeiJingtime[0] = x/10 + '0';
+	posiInfo.BeiJingtime[1] = x%10 + '0';
+	posiInfo.BeiJingtime[2] = ':';
+	posiInfo.BeiJingtime[3] = posiInfo.UTCtime[2];
+	posiInfo.BeiJingtime[4] = posiInfo.UTCtime[3];
+	posiInfo.BeiJingtime[5] = ':';
+	posiInfo.BeiJingtime[6] = posiInfo.UTCtime[4];
+	posiInfo.BeiJingtime[7] = posiInfo.UTCtime[5];
+ }
+
+ 
+ //将接收的UTCday转换成常见时间格式Today
+ void UTCtoToday(void)
+ {
+	posiInfo.Today[0] = '2';
+	posiInfo.Today[1] = '0';
+	posiInfo.Today[2] = posiInfo.UTCday[4];
+	posiInfo.Today[3] = posiInfo.UTCday[5];
+	posiInfo.Today[4] = '.';	 
+	posiInfo.Today[5] = posiInfo.UTCday[2];
+	posiInfo.Today[6] = posiInfo.UTCday[3];
+	posiInfo.Today[7] = '.';
+	posiInfo.Today[8] = posiInfo.UTCday[0];
+	posiInfo.Today[9] = posiInfo.UTCday[1];
+ }
 
 
  //打印GPS数据代码到串口
@@ -173,20 +162,15 @@ int GPSDataClass(char *str)
 	{
 //		printf("%s\r\n",GPSData.GNRMC);//探针
 		printf("Greenwich mean time is %c%c:%c%c:%c%c\r\n",posiInfo.UTCtime[0],posiInfo.UTCtime[1],posiInfo.UTCtime[2],posiInfo.UTCtime[3],posiInfo.UTCtime[4],posiInfo.UTCtime[5]);
-		free(posiInfo.UTCtime);
+		
 		if(posiInfo.status == 1)
 		{
 			posiInfo.status = 0;
 			printf("Today:20%c%c.%c%c.%c%c\r\n",posiInfo.UTCday[4],posiInfo.UTCday[5],posiInfo.UTCday[2],posiInfo.UTCday[3],posiInfo.UTCday[0],posiInfo.UTCday[1]);
-			free(posiInfo.UTCday);
+			printf("BeiJing time is:%c%c:%c%c:%c%c\r\n",posiInfo.BeiJingtime[0],posiInfo.BeiJingtime[1],posiInfo.BeiJingtime[3],posiInfo.BeiJingtime[4],posiInfo.BeiJingtime[6],posiInfo.BeiJingtime[7]);
 			printf("latitude:%s %s\r\n",posiInfo.latitude,posiInfo.N_S);
-			free(posiInfo.latitude);
-			free(posiInfo.N_S);
 			printf("longitude:%s %s\r\n",posiInfo.longitude,posiInfo.E_W);
-			free(posiInfo.longitude);
-			free(posiInfo.E_W);
 			printf("Mode:%s\r\n\r\n",posiInfo.mode);
-			free(posiInfo.mode);
 		}
 		
 	}
@@ -195,6 +179,31 @@ int GPSDataClass(char *str)
 		printf("GPS DATA is not usefull!\r\n");
 	}
  }
+ 
+ //清空posiInfo中数据
+ void freeInfo(void)
+ {
+	free(posiInfo.BeiJingtime);
+	free(posiInfo.UTCtime);
+	free(posiInfo.N_S);
+	free(posiInfo.latitude);
+	free(posiInfo.E_W);
+	free(posiInfo.longitude);
+	free(posiInfo.UTCday);
+	free(posiInfo.Today);
+	free(posiInfo.mode);
+ }
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
  
  
  

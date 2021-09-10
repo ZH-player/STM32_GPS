@@ -18,6 +18,7 @@ typedef struct basicData
 //存放定位信息（由GNRMC解析出来）
 typedef struct position
 {
+	char *BeiJingtime;
 	char *UTCtime;
 	int  status;//定位状态，A=有效定位，V=无效定位
 	char *N_S;//南北
@@ -27,6 +28,7 @@ typedef struct position
 //	int  speedKnot;// 地面速率（000.0~999.9节，Knot)
 //	int  direction;//地面航向（000.0~359.9度，以真北为参考基准)
 	char *UTCday;
+	char *Today;
 	char *mode;//模式指示（A=自主定位，D=差分，E=估算，N=数据无效）
 	int  isParsePosition;
 }position;
@@ -37,8 +39,15 @@ typedef struct position
 int GPSDataClass(char *str);
 //解析GPS数据
 void parseGPSData(int DataNum);
+//格林尼治转换成北京时间
+ void UTCtoBeiJing(void);
+//将接收的UTCday转换成常见时间格式Today
+ void UTCtoToday(void);
 //打印GPS数据代码到串口调试助手上
 void printfPosiInfo(void);
-
+//清空posiInfo中数据
+ void freeInfo(void);
+	 
+ 
 
 #endif
